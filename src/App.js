@@ -95,80 +95,137 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Real-Time Stock Price Dashboard</h1>
-      {!isLoggedIn ? (
+    <div className="flex flex-col items-center gap-4">
+      <div className="h-[70dvh] w-[60dvw] box-border grid grid-cols-[auto_auto_auto] grid-rows-1 rounded-[20px] mt-10 gap-10 items-center justify-center bg-gradient-to-br from-[rgba(255,255,255,0.1)] to-[rgba(255,255,255,0)] backdrop-blur border border-[rgba(255,255,255,0.18)] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
         <div>
-          {isSignup ? (
-            <form onSubmit={handleAuthSubmit}>
-              <h2>Sign Up</h2>
-              <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button type="submit">Sign Up</button>
-              <p onClick={() => setIsSignup(false)}>
-                Already have an account? Sign In
-              </p>
-            </form>
-          ) : (
-            <form onSubmit={handleAuthSubmit}>
-              <h2>Sign In</h2>
-              <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button type="submit">Sign In</button>
-              <p onClick={() => setIsSignup(true)}>
-                Don't have an account? Sign Up
-              </p>
-            </form>
-          )}
+          <h1 className="text-5xl flex flex-col text-white">
+            Real-Time Stock Price Dashboard
+          </h1>
         </div>
-      ) : (
-        <div>
-          <h2>Welcome, {username}!</h2>
-          <button onClick={handleLogout}>Logout</button>
-          <div>
-            <label>
-              Stock Symbols (comma-separated):
+        <span className="bg-[rgba(200,200,200,0.28)] w-[0.1rem] h-[80%] self-center rounded-full"></span>
+        {!isLoggedIn ? (
+          <div className="">
+            {isSignup ? (
+              <form
+                className="flex flex-col items-center gap-7"
+                onSubmit={handleAuthSubmit}
+              >
+                <h2 className="text-3xl text-white">Sign Up</h2>
+                <input
+                  className="w-[100%] h-10 rounded-md px-2"
+                  type="text"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <input
+                  className="w-[100%] h-10 rounded-md px-2"
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="bg-red-400 w-[60%] h-10 rounded-md hover:border hover:text-white"
+                >
+                  Sign Up
+                </button>
+                <p className="text-white" onClick={() => setIsSignup(false)}>
+                  Already have an account?{" "}
+                  <span className="hover:cursor-pointer hover:underline text-blue-500">
+                    Sign Up
+                  </span>
+                </p>
+              </form>
+            ) : (
+              <form
+                onSubmit={handleAuthSubmit}
+                className="flex flex-col items-center gap-7"
+              >
+                <h2 className="text-3xl text-white">Sign In</h2>
+                <input
+                  className="w-[100%] h-10 rounded-md px-2"
+                  type="text"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <input
+                  className="w-[100%] h-10 rounded-md px-2"
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="bg-red-400 w-[60%] h-10 rounded-md hover:border hover:text-white"
+                >
+                  Sign In
+                </button>
+                <p className="text-white" onClick={() => setIsSignup(true)}>
+                  Don't have an account?{" "}
+                  <span className="hover:cursor-pointer hover:underline text-blue-500">
+                    Sign Up
+                  </span>
+                </p>
+              </form>
+            )}
+          </div>
+        ) : (
+          <div className="text-white">
+            <h2 className="text-3xl mb-3">Welcome, {username} 👋🏻</h2>
+            <div className="flex flex-col">
+              <label htmlFor="stockName">
+                Enter Stock Symbols (comma-separated):
+              </label>
               <input
+                className="text-black w-[100%] h-10 rounded-md px-2 mb-5"
+                id="stockName"
                 type="text"
                 value={symbols}
                 onChange={(e) => setSymbols(e.target.value)}
               />
-            </label>
-            <button onClick={fetchStockPrices}>Get Prices</button>
-          </div>
-          {error && <p>{error}</p>}
-          {Object.keys(prices).length > 0 && (
-            <div>
-              {Object.entries(prices).map(([symbol, price]) => (
-                <h2 key={symbol}>
-                  {symbol} Price: ${price}
-                </h2>
-              ))}
+              <button
+                className="w-24 h-10 rounded-md bg-white hover:border-2 hover:border-green-600 text-black mb-5"
+                onClick={fetchStockPrices}
+              >
+                Get Prices
+              </button>
             </div>
-          )}
-          {historicalData.length > 0 && <Line data={chartData} />}
-        </div>
-      )}
+            {error && <p>{error}</p>}
+            {Object.keys(prices).length > 0 && (
+              <div>
+                {Object.entries(prices).map(([symbol, price]) => (
+                  <h2 key={symbol}>
+                    {symbol} Price: ${price}
+                  </h2>
+                ))}
+              </div>
+            )}
+            {historicalData.length > 0 && <Line data={chartData} />}
+            <button
+              className="bg-red-600 mt-5 font-semibold w-24 h-10 rounded-md hover:text-red-600 hover:bg-black"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
+        )}
+      </div>
+      <footer className="text-white">
+        Created by{" "}
+        <a
+          target="_blank"
+          href="https://www.linkedin.com/in/vinitml/"
+          className="hover:underline"
+          rel="noreferrer"
+        >
+          Vinit Mittal
+        </a>
+        👍
+      </footer>
     </div>
   );
 }
