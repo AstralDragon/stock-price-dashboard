@@ -30,7 +30,7 @@ function App() {
   const fetchHistoricalData = async (symbol) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/historical/${symbol}`
+        `https://stock-price-dashboard-3hz6.onrender.com/api/historical/${symbol}`
       );
       setHistoricalData(response.data);
     } catch (err) {
@@ -42,17 +42,23 @@ function App() {
     e.preventDefault();
     try {
       if (isSignup) {
-        await axios.post("http://localhost:5000/api/signup", {
-          username,
-          password,
-        });
+        await axios.post(
+          "https://stock-price-dashboard-3hz6.onrender.com/api/signup",
+          {
+            username,
+            password,
+          }
+        );
         alert("Signup successful! Please sign in.");
         setIsSignup(false); // Switch to sign-in after signup
       } else {
-        const response = await axios.post("http://localhost:5000/api/signin", {
-          username,
-          password,
-        });
+        const response = await axios.post(
+          "https://stock-price-dashboard-3hz6.onrender.com/api/signin",
+          {
+            username,
+            password,
+          }
+        );
         setIsLoggedIn(true);
         setSelectedSymbol(symbols.split(",")[0]); // Set the selected symbol to the first one in the list
         fetchHistoricalData(symbols.split(",")[0]); // Fetch historical data on login
