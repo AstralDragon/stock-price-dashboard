@@ -16,7 +16,7 @@ function App() {
   const fetchStockPrices = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/stocks?symbols=${symbols}`
+        `https://stock-price-dashboard-3hz6.onrender.com/api/stocks?symbols=${symbols}`
       );
       setPrices(response.data);
       setError("");
