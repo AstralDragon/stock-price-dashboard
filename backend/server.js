@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const User = require("./User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config(); // Load environment variables
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,11 +13,9 @@ const PORT = process.env.PORT || 5000;
 app.use(cors()); // Allow cross-origin requests
 app.use(express.json()); // Body parser to parse JSON request bodies
 
-// connect to MongoDB
+// Connect to MongoDB
 mongoose
-  .connect(
-    "mongodb+srv://vinitmittal14:s4CoBjrLL5xgLrhf@cluster0.awtjpjr.mongodb.net/stock-price-dashboard"
-  )
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
@@ -55,7 +54,7 @@ app.post("/api/signin", async (req, res) => {
     // Create and assign a token
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET || "radha_Raman@05"
+      process.env.JWT_SECRET
     );
     res.json({ token, role: user.role });
   } catch (error) {
@@ -64,8 +63,7 @@ app.post("/api/signin", async (req, res) => {
   }
 });
 
-// Alpha Vantage API setup
-const API_KEY = "cs5v6l1r01qv8tfq8kq0cs5v6l1r01qv8tfq8kqg";
+// Finnhub API setup
 const API_URL = "https://finnhub.io/api/v1/quote";
 
 // Endpoint to get stock price
@@ -79,7 +77,7 @@ app.get("/api/stocks", async (req, res) => {
         const response = await axios.get(`${API_URL}`, {
           params: {
             symbol: symbol,
-            token: API_KEY,
+            token: process.env.FINNHUB_API_KEY,
           },
         });
 
@@ -100,7 +98,6 @@ app.get("/api/stocks", async (req, res) => {
   }
 });
 
-
 // Endpoint to get historical prices
 app.get("/api/historical/:symbol", async (req, res) => {
   const symbol = req.params.symbol;
@@ -109,7 +106,7 @@ app.get("/api/historical/:symbol", async (req, res) => {
       params: {
         function: "TIME_SERIES_DAILY",
         symbol: symbol,
-        apikey: API_KEY,
+        apikey: process.env.FINNHUB_API_KEY,
       },
     });
     const timeSeries = response.data["Time Series (Daily)"];
